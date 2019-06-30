@@ -8,6 +8,9 @@
 		}
 		div.carousal {
 			position: relative;
+			width: 400px;
+		    overflow: hidden;
+		    margin: 0 auto;
 		}
 		div.icon {
 			position: absolute;
@@ -23,9 +26,46 @@
 		}
 		div.left {
 			left: 0;
+			z-index: 10;
 		}
 		div.right {
 			right: 0;
+			z-index: 10;
+		}
+		div.carousal_container {
+			width: 100%;
+			height: 700px;
+			overflow: hidden;
+			margin: 0 auto;
+			text-align: center;
+
+			display: flex;
+		}
+		div.imgContainer {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			position: absolute;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+
+		    overflow: hidden;
+
+		    z-index: 2;
+
+		    background-color: white;
+		}
+		div.animating {
+			transition: transform .4s ease-in-out;
+		}
+		div.is-active {
+			z-index: 3;
+		}
+		div.is-low-active {
+			z-index: 1;
 		}
 	</style>
 </head>
@@ -34,15 +74,76 @@
 		<div class="icon left">
 			<p><=</p>
 		</div>
-		<img src="1.PNG">
-		<img src="2.PNG">
-		<img src="3.PNG">
+		<div class="carousal_container">
+			<div class="imgContainer carousel__item animating">
+				<img src="1.PNG">
+			</div>
+			<div class="imgContainer carousel__item animating">
+				<img src="2.PNG">
+			</div>
+			<div class="imgContainer carousel__item animating">
+				<img src="3.PNG">
+			</div>
+		</div>
 		<div class="icon right">
 			<p>=></p>
 		</div>
 	</div>
 	<script type="text/javascript">
-		
+		window.onload = function() {
+			let carousal_with = document.getElementsByClassName("carousal_container")[0].clientWidth;
+			let carousel__items = document.getElementsByClassName("carousel__item");
+			let carousel__items_length = carousel__items.length;
+			let carousel__items_translateX_array = [];
+			for (let i = 0; i < carousel__items_length; i++) {
+				document.getElementsByClassName("carousel__item")[i].setAttribute("style", "transform: translateX(" + carousal_with * i+ "px)")
+				carousel__items_translateX_array.push(i);
+			}
+			carousel__items_translateX_array[carousel__items_length-1] = -1; // *
+			document.getElementsByClassName("right")[0].addEventListener("click", function() {
+				let k = carousel__items_translateX_array.pop();
+				carousel__items_translateX_array.unshift(k);
+				for (let i = 0; i < carousel__items_length; i++) {
+					document.getElementsByClassName("carousel__item")[i].setAttribute("style", "transform: translateX(" + carousal_with * carousel__items_translateX_array[i]+ "px)") // * 
+					change_is_active(i); // *
+				}
+			});
+
+			document.getElementsByClassName("left")[0].addEventListener("click", function() {
+				let k = carousel__items_translateX_array.shift();
+				carousel__items_translateX_array.push(k);
+				for (let i = 0; i < carousel__items_length; i++) {
+					document.getElementsByClassName("carousel__item")[i].setAttribute("style", "transform: translateX(" + carousal_with * carousel__items_translateX_array[i]+ "px)") // * 
+					change_is_active(i); // *
+				}
+			})
+
+			function change_is_active(i) {
+				if (carousel__items_translateX_array[i] == 0) {
+					let classVal = document.getElementsByClassName("carousel__item")[i].getAttribute("class");
+					classVal = classVal.concat(" is-active");
+					document.getElementsByClassName("carousel__item")[i].setAttribute("class", classVal);
+				} else {
+					let classVal = document.getElementsByClassName("carousel__item")[i].getAttribute("class");
+					classVal = classVal.replace(" is-active","");
+					document.getElementsByClassName("carousel__item")[i].setAttribute("class", classVal);
+				}
+
+				// 无效？
+				if (carousel__items_translateX_array[i] == -1) {
+					let classVal = document.getElementsByClassName("carousel__item")[i].getAttribute("class");
+					classVal = classVal.concat(" is-low-active");
+					document.getElementsByClassName("carousel__item")[i].setAttribute("class", classVal);
+				} else {
+					let classVal = document.getElementsByClassName("carousel__item")[i].getAttribute("class");
+					classVal = classVal.replace(" is-low-active","");
+					document.getElementsByClassName("carousel__item")[i].setAttribute("class", classVal);
+				}
+			}
+		}
+
+	
+	
 	</script>
 </body>
 </html>
