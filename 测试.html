@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>测试</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="test">
+		<div>
+			<div>
+				1
+			</div>
+		</div>
+		<div>
+			<div>
+				2
+			</div>
+			<div>
+				3
+			</div>
+			<div>
+				4
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+function avg(...args) {
+    var sum = 0;
+    for (let value of args) {
+        sum += value;
+    }
+    return sum / args.length;
+}
+
+
+
+console.log(avg(2, 3, 4, 5));
+console.log(avg.apply(null, [2, 3, 4, 5]));
+
+
+var a = 1;
+var b = 2;
+(function() {
+    var b = 3;
+    a += b;
+})();
+
+
+console.log(a);
+console.log(b);
+
+
+function countChars(elm) {
+    if (elm.nodeType == 3) { // TEXT_NODE ⽂本节点
+    	// console.log(elm, elm.nodeValue.length);
+        return elm.nodeValue.length;
+    }
+    var count = 0;
+    for (var i = 0, child; child = elm.childNodes[i]; i++) {
+        count += countChars(child);
+    }
+    return count;
+}
+
+console.log(countChars(document.body))
+
+
+function Person(first, last) {
+    this.first = first;
+    this.last = last;
+    this.fullName = function() {
+        return this.first + ' ' + this.last;
+    }
+    this.fullNameReversed = function() {
+        return this.last + ', ' + this.first;
+    }
+}
+s = new Person("Simon", "Willison"); 
+
+// s.firstNameCaps();
+
+Person.prototype.
+	firstNameCaps = function() {
+		return this.first.toUpperCase()
+}
+
+console.log(s.firstNameCaps());
+
+
+function parentFunc() {   var a = 1;    function nestedFunc() {     var b = 4; // parentFunc ⽆法访问 b     
+return a + b;   }   return nestedFunc(); // 5 
+}
+
+console.log(parentFunc());
+
+</script>
+</body>
+</html>
