@@ -97,6 +97,33 @@ return a + b;   }   return nestedFunc(); // 5
 
 console.log(parentFunc());
 
+var sym1 = Symbol();
+var sym2 = Symbol('foo');
+var sym3 = Symbol('foo');
+
+console.log(sym2 === sym2);
+
+
+var Pet = (function() {
+  function Pet(type) {
+    this.type = type;
+  }
+  Pet.prototype.getType = function() {
+    return this.type;
+  }
+  return Pet;
+}());
+
+var a = new Pet('dog');
+console.log(a.getType());//Output: dog
+a.type = null;
+//Modified outside
+console.log(a.getType());//Output: null
+
+let array = [1,2,3];
+console.log(array instanceof Array, typeof array)
+console.log(array instanceof String);
+
 </script>
 </body>
 </html>
